@@ -3,12 +3,8 @@ import json
 import math
 import datetime
 import populartimes
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 import numpy as np
 import os.path
-import _thread
 from os import path
 from flask import Flask, send_file
 app = Flask(__name__)
