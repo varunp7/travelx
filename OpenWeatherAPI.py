@@ -76,8 +76,7 @@ def openhours(place_ide, weekda):
     response = requests.request("POST", url)
     response = response.json()
     opennow = response["result"]["opening_hours"]["open_now"]
-    texttodisplay = response["result"]["opening_hours"]["weekday_text"][weekday]
-    print(texttodisplay)
+    texttodisplay = str(response["result"]["opening_hours"]["weekday_text"][weekday])
     vals = { "opennow": opennow, "text": texttodisplay}
     vals_son = json.dumps(vals)
     return vals_son
