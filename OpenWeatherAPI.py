@@ -109,6 +109,10 @@ def scoredisplay(inlat, inlon):
     valo_son = json.dumps(valo)
     return valo_son
 
+@app.route('/logo.png')
+def logo():
+    return send_file("logo.png")
+
 @app.route('/riskscore/<capacity>/<crowd>/<masks>/<soc_distance>/<inlat>/<inlon>/<comme>')
 def calcrisk(capacity, crowd, masks, soc_distance, inlat, inlon, comme):
     masks = int(masks)
