@@ -3,8 +3,12 @@ import json
 import math
 import datetime
 import populartimes
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import numpy as np
 import os.path
+import _thread
 from os import path
 from flask import Flask, send_file
 app = Flask(__name__)
@@ -72,7 +76,8 @@ def openhours(place_ide, weekda):
     response = requests.request("POST", url)
     response = response.json()
     opennow = response["result"]["opening_hours"]["open_now"]
-    texttodisplay = str(response["result"]["opening_hours"]["weekday_text"][weekday])
+    texttodisplay = response["result"]["opening_hours"]["weekday_text"][weekday]
+    print(texttodisplay)
     vals = { "opennow": opennow, "text": texttodisplay}
     vals_son = json.dumps(vals)
     return vals_son
@@ -107,6 +112,24 @@ def scoredisplay(inlat, inlon):
 @app.route('/logo.png')
 def logo():
     return send_file("logo.png")
+
+@app.route('/calcdata/<inlat>/<inlon>')
+def calcdata(inlat, inlon):
+    lat = str(inlat)
+    lon = str(inlon)
+    comment = []
+    avgscore = 0.00
+    scorefreq = 0
+    filenametwo = str(lat) + "," + str(lon) + "_comments.txt"
+    with open(filenametwo, 'r') as reader:
+        comment.append(reader.readline())
+    filenameone = str(lat) + "," + str(lon) + ".txt"
+    with open(filenameone, 'r') as readero:
+        avgscore = float(readero.readline())
+        scorefreq = int(readero.readline())
+    valo = {"comments" : comment, "avgscore" : avgscore, "scorefreq" : scorefreq}
+    valo_son = json.dumps(valo)
+    return valo_son
 
 @app.route('/riskscore/<capacity>/<crowd>/<masks>/<soc_distance>/<inlat>/<inlon>/<comme>')
 def calcrisk(capacity, crowd, masks, soc_distance, inlat, inlon, comme):
